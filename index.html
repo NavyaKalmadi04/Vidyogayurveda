@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VidYoga Ayurveda — Yoga & Ayurveda Wellness Center</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&family=Noto+Sans+Devanagari:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --gd:#2e5c2e;--gm:#4a7c3f;--gl:#7aab5e;
+      --or:#d45a1a;--orl:#e8783c;
+      --cr:#fdf8f0;--crd:#f5ede0;
+      --td:#2a2a1e;--tm:#4a4a38;--tl:#7a7a68;
+      --wh:#ffffff;--gold:#c8952a;
+      --sh:0 4px 24px rgba(46,92,46,.12);
+      --shl:0 8px 40px rgba(46,92,46,.18);
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:'Lato',sans-serif;background:var(--cr);color:var(--td);overflow-x:hidden}
+
+    /* NAV */
+    nav.topnav{
+      position:fixed;top:0;left:0;right:0;z-index:1000;
+      background:rgba(253,248,240,.97);backdrop-filter:blur(8px);
+      border-bottom:1px solid rgba(122,171,94,.2);
+      padding:0 5%;display:flex;align-items:center;justify-content:space-between;
+      height:72px;box-shadow:0 2px 12px rgba(46,92,46,.08);
+    }
+    .nav-logo{display:flex;align-items:center;gap:12px;text-decoration:none}
+    .nav-logo img{height:52px;width:52px;object-fit:contain;border-radius:50%}
+    .nltext .brand{font-family:'Playfair Display',serif;font-size:1.22rem;color:var(--gd);font-weight:700;display:block}
+    .nltext .tag{font-size:.67rem;color:var(--or);letter-spacing:1px;text-transform:uppercase;font-family:'Noto Sans Devanagari',sans-serif;display:block}
+    .nav-links{display:flex;align-items:center;gap:28px;list-style:none}
+    .nav-links a{text-decoration:none;color:var(--tm);font-size:.85rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase;position:relative;padding-bottom:4px;transition:color .2s}
+    .nav-links a::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--or);transform:scaleX(0);transition:transform .25s}
+    .nav-links a:hover{color:var(--or)}
+    .nav-links a:hover::after{transform:scaleX(1)}
+    .nav-cta{background:var(--gd)!important;color:var(--wh)!important;padding:10px 20px!important;border-radius:4px}
+    .nav-cta::after{display:none!important}
+    .nav-cta:hover{background:var(--gm)!important}
+    .ham{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:6px}
+    .ham span{display:block;width:24px;height:2px;background:var(--gd);border-radius:2px;transition:all .3s}
+    .mob-nav{display:none;position:fixed;top:72px;left:0;right:0;bottom:0;background:var(--cr);z-index:999;overflow-y:auto;padding:28px 5%;flex-direction:column;gap:4px}
+    .mob-nav.open{display:flex}
+    .mob-nav a{text-decoration:none;color:var(--td);font-size:1.05rem;font-weight:700;padding:13px 0;border-bottom:1px solid rgba(122,171,94,.15);display:block}
+    .mob-nav .mcta{margin-top:14px;background:var(--gd);color:var(--wh)!important;text-align:center;border-radius:6px;border:none!important;padding:14px!important}
+
+    /* HERO */
+    .hero{min-height:100vh;background:linear-gradient(135deg,#e8f5e0 0%,#fdf8f0 45%,#fff8ee 100%);display:flex;align-items:center;padding:90px 5% 60px;position:relative;overflow:hidden}
+    .hero::before{content:'';position:absolute;top:-80px;right:-100px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(122,171,94,.14) 0%,transparent 70%);pointer-events:none}
+    .hero::after{content:'';position:absolute;bottom:-60px;left:-60px;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,rgba(212,90,26,.07) 0%,transparent 70%);pointer-events:none}
+    .hero-in{max-width:1200px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+    .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(46,92,46,.08);border:1px solid rgba(46,92,46,.2);color:var(--gd);font-size:.74rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:6px 14px;border-radius:100px;margin-bottom:18px}
+    .hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.1rem,4.2vw,3.5rem);line-height:1.15;color:var(--gd);font-weight:700;margin-bottom:10px}
+    .hero-title em{color:var(--or);font-style:italic}
+    .hero-sanskrit{font-family:'Noto Sans Devanagari',sans-serif;font-size:1.05rem;color:var(--or);font-weight:600;margin-bottom:18px}
+    .hero-desc{font-size:.97rem;line-height:1.78;color:var(--tm);margin-bottom:32px;max-width:480px}
+    .hero-btns{display:flex;gap:13px;flex-wrap:wrap}
+    .btn-p{background:var(--or);color:var(--wh);padding:13px 30px;border-radius:4px;text-decoration:none;font-weight:700;font-size:.86rem;letter-spacing:.5px;text-transform:uppercase;transition:background .2s,transform .2s;border:2px solid var(--or);display:inline-block}
+    .btn-p:hover{background:var(--orl);transform:translateY(-2px)}
+    .btn-s{background:transparent;color:var(--gd);padding:13px 30px;border-radius:4px;text-decoration:none;font-weight:700;font-size:.86rem;letter-spacing:.5px;text-transform:uppercase;border:2px solid var(--gd);transition:all .2s;display:inline-block}
+    .btn-s:hover{background:var(--gd);color:var(--wh);transform:translateY(-2px)}
+    .hero-stats{display:flex;gap:28px;margin-top:38px}
+    .hstat .num{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;color:var(--gd)}
+    .hstat .lbl{font-size:.75rem;color:var(--tl);text-transform:uppercase;letter-spacing:1px}
+    .hero-img-wrap{display:flex;justify-content:center;align-items:center;position:relative}
+    .hero-logo-lg{width:min(340px,90%);filter:drop-shadow(0 12px 40px rgba(46,92,46,.22));animation:float 5s ease-in-out infinite;border-radius:50%}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
+    .leaf{position:absolute;opacity:.15;font-size:3.5rem;pointer-events:none}
+    .leaf:nth-child(2){top:8%;right:4%;animation:spin 12s linear infinite}
+    .leaf:nth-child(3){bottom:8%;left:4%;animation:spin 16s linear infinite reverse}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* SECTION BASE */
+    section{padding:80px 5%}
+    .si{max-width:1200px;margin:0 auto}
+    .sh{text-align:center;margin-bottom:52px}
+    .sbadge{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--or);margin-bottom:10px}
+    .stitle{font-family:'Playfair Display',serif;font-size:clamp(1.7rem,2.8vw,2.5rem);color:var(--gd);line-height:1.2;margin-bottom:13px}
+    .sdesc{font-size:.95rem;color:var(--tm);max-width:550px;margin:0 auto;line-height:1.75}
+    .div{width:56px;height:3px;background:var(--or);margin:14px auto 0;border-radius:2px}
+
+    /* ABOUT */
+    .about{background:var(--wh)}
+    .about-g{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+    .about-vis{position:relative;display:flex;justify-content:center}
+    .about-logo{width:min(260px,100%);filter:drop-shadow(0 8px 24px rgba(46,92,46,.15));border-radius:50%}
+    .about-badge{position:absolute;bottom:-14px;right:0;background:var(--or);color:var(--wh);padding:13px 18px;border-radius:8px;text-align:center;box-shadow:var(--sh)}
+    .about-badge .num{font-size:1.7rem;font-weight:700;font-family:'Playfair Display',serif}
+    .about-badge .lbl{font-size:.7rem;text-transform:uppercase;letter-spacing:1px}
+    .about-text h2{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,2.4vw,2.1rem);color:var(--gd);margin-bottom:14px}
+    .about-text p{font-size:.93rem;line-height:1.8;color:var(--tm);margin-bottom:12px}
+    .pillars{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:22px}
+    .pill{display:flex;align-items:center;gap:9px;background:var(--cr);padding:11px 13px;border-radius:6px;font-size:.83rem;font-weight:700;color:var(--gd)}
+
+    /* SERVICES */
+    .services{background:var(--cr)}
+    .svc-g{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+    .svc-card{background:var(--wh);border-radius:12px;padding:30px 22px;box-shadow:var(--sh);transition:transform .25s,box-shadow .25s;position:relative;overflow:hidden;text-align:center}
+    .svc-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--gm)}
+    .svc-card:hover{transform:translateY(-6px);box-shadow:var(--shl)}
+    .svc-icon{font-size:2.7rem;margin-bottom:14px}
+    .svc-card h3{font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--gd);margin-bottom:9px}
+    .svc-card p{font-size:.86rem;color:var(--tm);line-height:1.7}
+    .svc-card .lm{display:inline-block;margin-top:13px;font-size:.78rem;font-weight:700;color:var(--or);text-decoration:none;letter-spacing:.5px;text-transform:uppercase}
+    .svc-card .lm:hover{text-decoration:underline}
+
+    /* CLASSES */
+    .classes{background:var(--wh)}
+    .cls-g{display:grid;grid-template-columns:repeat(2,1fr);gap:26px}
+    .cls-card{border-radius:12px;overflow:hidden;box-shadow:var(--sh);display:flex;flex-direction:column;transition:transform .25s}
+    .cls-card:hover{transform:translateY(-4px)}
+    .cls-banner{height:150px;display:flex;align-items:center;justify-content:center;font-size:4.5rem}
+    .cb1{background:linear-gradient(135deg,#d4edda,#a8d5b5)}
+    .cb2{background:linear-gradient(135deg,#ffe0c0,#f5c89a)}
+    .cb3{background:linear-gradient(135deg,#dce8ff,#b0c8f0)}
+    .cb4{background:linear-gradient(135deg,#f0e8ff,#d4b8f0)}
+    .cls-body{padding:22px;flex:1;background:var(--wh)}
+    .cls-body h3{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--gd);margin-bottom:7px}
+    .cls-body p{font-size:.86rem;color:var(--tm);line-height:1.65;margin-bottom:12px}
+    .cls-tags{display:flex;gap:10px;flex-wrap:wrap}
+    .ctag{background:var(--cr);color:var(--gd);font-size:.7rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:3px 9px;border-radius:100px}
+
+    /* TESTIMONIALS */
+    .testi{background:var(--gd);color:var(--wh)}
+    .testi .stitle{color:var(--wh)}
+    .testi .sdesc{color:rgba(255,255,255,.7)}
+    .testi .sbadge{color:rgba(255,255,255,.55)}
+    .testi-g{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+    .tc{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:26px 22px}
+    .tc-stars{color:var(--gold);font-size:.88rem;margin-bottom:10px}
+    .tc-text{font-size:.88rem;line-height:1.75;color:rgba(255,255,255,.84);margin-bottom:18px;font-style:italic}
+    .tc-auth{display:flex;align-items:center;gap:11px}
+    .tc-av{width:40px;height:40px;border-radius:50%;background:var(--or);display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:700;color:var(--wh);flex-shrink:0}
+    .tc-name{font-weight:700;font-size:.88rem}
+    .tc-role{font-size:.73rem;color:rgba(255,255,255,.48)}
+
+    /* SCHEDULE */
+    .schedule{background:var(--cr)}
+    .tbl-wrap{overflow-x:auto;border-radius:12px;box-shadow:var(--sh)}
+    table{width:100%;border-collapse:collapse;background:var(--wh);min-width:580px}
+    thead th{background:var(--gd);color:var(--wh);padding:13px 16px;font-size:.8rem;letter-spacing:1px;text-transform:uppercase;text-align:left}
+    tbody tr:nth-child(even){background:var(--cr)}
+    tbody td{padding:13px 16px;font-size:.88rem;color:var(--tm);border-bottom:1px solid rgba(122,171,94,.1)}
+    tbody tr:hover{background:rgba(122,171,94,.07)}
+    .bl{background:rgba(212,90,26,.11);color:var(--or);font-size:.68rem;font-weight:700;letter-spacing:.5px;padding:3px 7px;border-radius:100px;text-transform:uppercase}
+
+    /* CONTACT */
+    .contact{background:var(--wh)}
+    .contact-g{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:start}
+    .ci h2{font-family:'Playfair Display',serif;font-size:1.85rem;color:var(--gd);margin-bottom:14px}
+    .ci p{font-size:.93rem;color:var(--tm);line-height:1.75;margin-bottom:26px}
+    .ci-items{display:flex;flex-direction:column;gap:14px}
+    .ci-item{display:flex;align-items:flex-start;gap:13px;padding:14px;background:var(--cr);border-radius:8px}
+    .ci-ico{font-size:1.35rem;flex-shrink:0;margin-top:2px}
+    .ci-lbl{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--tl);margin-bottom:3px}
+    .ci-val{font-size:.9rem;color:var(--td)}
+    .cform{background:var(--cr);padding:34px;border-radius:12px}
+    .cform h3{font-family:'Playfair Display',serif;font-size:1.25rem;color:var(--gd);margin-bottom:18px}
+    .fr{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+    .fg{display:flex;flex-direction:column;margin-bottom:14px}
+    label{font-size:.76rem;font-weight:700;color:var(--tm);margin-bottom:5px;letter-spacing:.5px;text-transform:uppercase}
+    input,select,textarea{border:1.5px solid rgba(122,171,94,.3);border-radius:6px;padding:11px 13px;font-size:.88rem;font-family:'Lato',sans-serif;color:var(--td);background:var(--wh);transition:border-color .2s,box-shadow .2s;outline:none}
+    input:focus,select:focus,textarea:focus{border-color:var(--gm);box-shadow:0 0 0 3px rgba(74,124,63,.1)}
+    textarea{resize:vertical;min-height:95px}
+    .bsub{width:100%;background:var(--or);color:var(--wh);border:none;padding:13px;border-radius:6px;font-size:.88rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;transition:background .2s,transform .2s}
+    .bsub:hover{background:var(--orl);transform:translateY(-2px)}
+
+    /* FOOTER */
+    footer{background:var(--td);color:rgba(255,255,255,.72);padding:52px 5% 26px}
+    .fg4{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:36px;padding-bottom:36px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:24px}
+    .fbrand p{font-size:.83rem;line-height:1.7;margin-top:13px}
+    .fbrand .brand{color:var(--wh)!important}
+    .fbrand .tag{color:rgba(255,255,255,.48)!important}
+    .fcol h4{font-size:.73rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--wh);margin-bottom:14px}
+    .fcol ul{list-style:none}
+    .fcol ul li{margin-bottom:8px}
+    .fcol ul li a{text-decoration:none;color:rgba(255,255,255,.63);font-size:.85rem;transition:color .2s}
+    .fcol ul li a:hover{color:var(--orl)}
+    .fbot{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:.78rem;color:rgba(255,255,255,.38)}
+    .fbot a{color:var(--orl);text-decoration:none}
+
+    /* REVEAL */
+    .rv{opacity:0;transform:translateY(22px);transition:opacity .5s,transform .5s}
+    .rv.vis{opacity:1;transform:none}
+
+    /* RESPONSIVE */
+    @media(max-width:1024px){
+      .svc-g{grid-template-columns:repeat(2,1fr)}
+      .testi-g{grid-template-columns:repeat(2,1fr)}
+      .fg4{grid-template-columns:1fr 1fr}
+    }
+    @media(max-width:768px){
+      nav.topnav{padding:0 4%}
+      .nav-links{display:none}
+      .ham{display:flex}
+      .hero{padding:88px 4% 44px}
+      .hero-in{grid-template-columns:1fr;gap:36px;text-align:center}
+      .hero-logo-lg{order:-1;width:min(220px,78%)}
+      .hero-btns{justify-content:center}
+      .hero-stats{justify-content:center}
+      .hero-desc{margin:0 auto 26px}
+      .hero-badge{margin:0 auto 14px}
+      section{padding:56px 4%}
+      .about-g{grid-template-columns:1fr;gap:32px}
+      .about-vis{display:none}
+      .svc-g{grid-template-columns:1fr}
+      .cls-g{grid-template-columns:1fr}
+      .testi-g{grid-template-columns:1fr}
+      .contact-g{grid-template-columns:1fr;gap:28px}
+      .fr{grid-template-columns:1fr}
+      .fg4{grid-template-columns:1fr;gap:24px}
+      .fbot{flex-direction:column;align-items:center;text-align:center}
+      .pillars{grid-template-columns:1fr}
+    }
+    @media(max-width:480px){
+      .hero-stats{gap:18px}
+      .hstat .num{font-size:1.5rem}
+      .cform{padding:20px 16px}
+    }
+  </style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="#" class="nav-logo">
+    <img src="logo.jpeg" alt="VidYoga Logo" />
+    <div class="nltext">
+      <span class="brand">VidYoga Ayurveda</span>
+      <span class="tag">विद्या ददाति विनयम्</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#classes">Classes</a></li>
+    <li><a href="#schedule">Schedule</a></li>
+    <li><a href="#contact" class="nav-cta">Book Session</a></li>
+  </ul>
+  <button class="ham" id="ham" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<nav class="mob-nav" id="mobNav">
+  <a href="#about" onclick="cm()">About</a>
+  <a href="#services" onclick="cm()">Services</a>
+  <a href="#classes" onclick="cm()">Classes</a>
+  <a href="#schedule" onclick="cm()">Schedule</a>
+  <a href="#contact" class="mcta" onclick="cm()">Book a Session</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-in">
+    <div>
+      <div class="hero-badge"><span>🌿</span> Ancient Wisdom · Modern Wellness</div>
+      <h1 class="hero-title">Heal. Balance.<br><em>Transform.</em></h1>
+      <p class="hero-sanskrit">विद्या ददाति विनयम् — Knowledge Brings Humility</p>
+      <p class="hero-desc">Discover the ancient science of Ayurveda and Yoga, blended for modern life. Our certified practitioners guide you on a personalised wellness journey — body, mind, and spirit in harmony.</p>
+      <div class="hero-btns">
+        <a href="#contact" class="btn-p">Book a Free Consultation</a>
+        <a href="#services" class="btn-s">Explore Services</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hstat"><div class="num">15+</div><div class="lbl">Years of Practice</div></div>
+        <div class="hstat"><div class="num">2500+</div><div class="lbl">Students Healed</div></div>
+        <div class="hstat"><div class="num">30+</div><div class="lbl">Expert Practitioners</div></div>
+      </div>
+    </div>
+    <div class="hero-img-wrap">
+      <span class="leaf">🍃</span>
+      <img src="logo.jpeg" alt="VidYoga Ayurveda" class="hero-logo-lg" />
+      <span class="leaf">🌿</span>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="si">
+    <div class="about-g">
+      <div class="about-vis rv">
+        <img src="logo.jpeg" alt="VidYoga Logo" class="about-logo" />
+        <div class="about-badge"><div class="num">15+</div><div class="lbl">Years of Excellence</div></div>
+      </div>
+      <div class="about-text rv">
+        <div class="sbadge">About VidYoga</div>
+        <h2>Where Ancient Wisdom Meets Modern Healing</h2>
+        <p>VidYoga Ayurveda was founded on the principle that true health is a balance of body, mind, and spirit. Rooted in the 5,000-year-old science of Ayurveda and the discipline of classical Yoga, we bring personalised wellness to every individual.</p>
+        <p>Our motto — <strong>विद्या ददाति विनयम्</strong> (Knowledge gives humility) — guides everything we do. We believe in educating our students deeply so they can carry the wisdom of these ancient traditions into their daily lives.</p>
+        <div class="pillars">
+          <div class="pill">🌿 Herbal Healing</div>
+          <div class="pill">🧘 Classical Yoga</div>
+          <div class="pill">🫁 Pranayama</div>
+          <div class="pill">🧠 Mind Wellness</div>
+          <div class="pill">🍵 Dosha Balance</div>
+          <div class="pill">💆 Panchakarma</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="si">
+    <div class="sh rv">
+      <div class="sbadge">What We Offer</div>
+      <h2 class="stitle">Our Healing Services</h2>
+      <p class="sdesc">Comprehensive Ayurvedic and Yoga-based therapies tailored to your unique constitution and wellness goals.</p>
+      <div class="div"></div>
+    </div>
+    <div class="svc-g">
+      <div class="svc-card rv"><div class="svc-icon">🌿</div><h3>Ayurvedic Consultation</h3><p>Personalised Prakriti analysis with tailored diet, lifestyle, and herbal remedy recommendations by certified Ayurvedic physicians.</p><a href="#contact" class="lm">Learn More →</a></div>
+      <div class="svc-card rv"><div class="svc-icon">🧘</div><h3>Yoga Therapy</h3><p>Therapeutic yoga sessions designed for specific health conditions, combining asanas, pranayama, and meditation for holistic recovery.</p><a href="#contact" class="lm">Learn More →</a></div>
+      <div class="svc-card rv"><div class="svc-icon">💆</div><h3>Panchakarma Detox</h3><p>Classical five-fold Ayurvedic purification therapy to detoxify, restore doshic balance, and rejuvenate the entire system.</p><a href="#contact" class="lm">Learn More →</a></div>
+      <div class="svc-card rv"><div class="svc-icon">🫁</div><h3>Pranayama & Breathwork</h3><p>Structured breathing practices (Anulom Vilom, Kapalbhati, Bhramari) guided by experts to calm the nervous system and enhance vitality.</p><a href="#contact" class="lm">Learn More →</a></div>
+      <div class="svc-card rv"><div class="svc-icon">🧠</div><h3>Meditation & Mindfulness</h3><p>Traditional Dhyana techniques and modern mindfulness to reduce stress, improve clarity, and cultivate lasting inner peace.</p><a href="#contact" class="lm">Learn More →</a></div>
+      <div class="svc-card rv"><div class="svc-icon">🍵</div><h3>Nutrition & Herbal Remedies</h3><p>Dietary guidance aligned with your dosha and season, alongside customised herbal formulations from certified Ayurvedic pharmacies.</p><a href="#contact" class="lm">Learn More →</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- CLASSES -->
+<section class="classes" id="classes">
+  <div class="si">
+    <div class="sh rv">
+      <div class="sbadge">Join Us</div>
+      <h2 class="stitle">Our Classes & Programs</h2>
+      <p class="sdesc">From beginner-friendly morning Yoga to intensive Ayurvedic lifestyle programs — find the class that resonates with you.</p>
+      <div class="div"></div>
+    </div>
+    <div class="cls-g">
+      <div class="cls-card rv">
+        <div class="cls-banner cb1">🧘</div>
+        <div class="cls-body"><h3>Morning Hatha Yoga</h3><p>Classical Hatha Yoga postures to strengthen, flex, and energise the body — suitable for all levels.</p><div class="cls-tags"><span class="ctag">All Levels</span><span class="ctag">6:00 AM – 7:30 AM</span><span class="ctag">Mon–Sat</span></div></div>
+      </div>
+      <div class="cls-card rv">
+        <div class="cls-banner cb2">🌿</div>
+        <div class="cls-body"><h3>Ayurveda Lifestyle Program</h3><p>30-day immersive program covering Dinacharya, Ritucharya, diet, and herbal self-care techniques.</p><div class="cls-tags"><span class="ctag">Beginner–Intermediate</span><span class="ctag">Weekends</span><span class="ctag">Batch of 15</span></div></div>
+      </div>
+      <div class="cls-card rv">
+        <div class="cls-banner cb3">🧠</div>
+        <div class="cls-body"><h3>Guided Meditation Sessions</h3><p>Group and individual guided meditation using Trataka, Yoga Nidra, and Vipassana techniques.</p><div class="cls-tags"><span class="ctag">All Levels</span><span class="ctag">Evening Sessions</span><span class="ctag">Online & Offline</span></div></div>
+      </div>
+      <div class="cls-card rv">
+        <div class="cls-banner cb4">🫁</div>
+        <div class="cls-body"><h3>Pranayama & Shatkarma</h3><p>Advanced breathwork and yogic cleansing techniques for practitioners ready to deepen their practice beyond asana.</p><div class="cls-tags"><span class="ctag">Intermediate+</span><span class="ctag">7:30 AM – 8:30 AM</span><span class="ctag">Tue/Thu/Sat</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testi" id="testimonials">
+  <div class="si">
+    <div class="sh rv">
+      <div class="sbadge">Student Stories</div>
+      <h2 class="stitle">What Our Community Says</h2>
+      <p class="sdesc">Real transformations from students and patients who've walked the path of Ayurveda and Yoga with us.</p>
+      <div class="div"></div>
+    </div>
+    <div class="testi-g">
+      <div class="tc rv"><div class="tc-stars">★★★★★</div><p class="tc-text">"After years of chronic digestive issues, the Panchakarma and dietary guidance from VidYoga truly changed my life. I feel lighter, clearer, and more energetic than ever."</p><div class="tc-auth"><div class="tc-av">P</div><div><div class="tc-name">Priya Sharma</div><div class="tc-role">Hyderabad, Telangana</div></div></div></div>
+      <div class="tc rv"><div class="tc-stars">★★★★★</div><p class="tc-text">"The morning Hatha Yoga classes have become the anchor of my day. The teachers here have deep knowledge and genuine care for each student's progress."</p><div class="tc-auth"><div class="tc-av">R</div><div><div class="tc-name">Rahul Mishra</div><div class="tc-role">Warangal, Telangana</div></div></div></div>
+      <div class="tc rv"><div class="tc-stars">★★★★★</div><p class="tc-text">"The 30-day Ayurveda Lifestyle Program was transformative. I now understand my Prakriti deeply and have tools to maintain balance through every season."</p><div class="tc-auth"><div class="tc-av">A</div><div><div class="tc-name">Ananya Reddy</div><div class="tc-role">Bangalore, Karnataka</div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SCHEDULE -->
+<section class="schedule" id="schedule">
+  <div class="si">
+    <div class="sh rv">
+      <div class="sbadge">Weekly Timetable</div>
+      <h2 class="stitle">Class Schedule</h2>
+      <p class="sdesc">Join us in-person or online. All timings in IST.</p>
+      <div class="div"></div>
+    </div>
+    <div class="tbl-wrap rv">
+      <table>
+        <thead><tr><th>Day</th><th>Time</th><th>Class</th><th>Instructor</th><th>Mode</th></tr></thead>
+        <tbody>
+          <tr><td>Monday – Saturday</td><td>6:00 – 7:30 AM</td><td>Hatha Yoga (Beginner)</td><td>Guru Vivek</td><td><span class="bl">In-Person</span></td></tr>
+          <tr><td>Monday – Saturday</td><td>7:30 – 8:30 AM</td><td>Pranayama & Breathwork</td><td>Dr. Meena</td><td><span class="bl">Hybrid</span></td></tr>
+          <tr><td>Tuesday / Thursday</td><td>5:30 – 6:30 PM</td><td>Meditation (Yoga Nidra)</td><td>Guru Vivek</td><td><span class="bl">Online</span></td></tr>
+          <tr><td>Wednesday / Friday</td><td>6:00 – 7:00 PM</td><td>Vinyasa Flow Yoga</td><td>Shruti Rao</td><td><span class="bl">In-Person</span></td></tr>
+          <tr><td>Saturday</td><td>8:30 – 10:00 AM</td><td>Ayurveda Workshop</td><td>Dr. Meena</td><td><span class="bl">In-Person</span></td></tr>
+          <tr><td>Sunday</td><td>7:00 – 9:00 AM</td><td>Special Retreat Session</td><td>Full Team</td><td><span class="bl">In-Person</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="si">
+    <div class="sh rv">
+      <div class="sbadge">Get In Touch</div>
+      <h2 class="stitle">Book a Session or Consultation</h2>
+      <p class="sdesc">Take the first step on your healing journey. Our team will reach out within 24 hours.</p>
+      <div class="div"></div>
+    </div>
+    <div class="contact-g">
+      <div class="ci rv">
+        <h2>We'd Love to Hear From You</h2>
+        <p>Whether you're curious about Ayurveda, looking for a yoga class, or ready to start a full wellness program — we're here to guide you every step of the way.</p>
+        <div class="ci-items">
+          <div class="ci-item"><span class="ci-ico">📍</span><div><div class="ci-lbl">Address</div><div class="ci-val">VidYoga Ayurveda Wellness Center,<br>Warangal, Telangana 506001</div></div></div>
+          <div class="ci-item"><span class="ci-ico">📞</span><div><div class="ci-lbl">Phone</div><div class="ci-val">+91 98765 43210</div></div></div>
+          <div class="ci-item"><span class="ci-ico">✉️</span><div><div class="ci-lbl">Email</div><div class="ci-val">hello@vidyogaayurveda.in</div></div></div>
+          <div class="ci-item"><span class="ci-ico">🕐</span><div><div class="ci-lbl">Centre Hours</div><div class="ci-val">Mon–Sat: 5:30 AM – 9:00 PM<br>Sunday: 7:00 AM – 1:00 PM</div></div></div>
+        </div>
+      </div>
+      <div class="cform rv">
+        <h3>Send Us a Message</h3>
+        <div class="fr">
+          <div class="fg"><label>First Name</label><input type="text" placeholder="Priya" /></div>
+          <div class="fg"><label>Last Name</label><input type="text" placeholder="Sharma" /></div>
+        </div>
+        <div class="fg"><label>Email</label><input type="email" placeholder="you@example.com" /></div>
+        <div class="fg"><label>Phone Number</label><input type="tel" placeholder="+91 98765 43210" /></div>
+        <div class="fg"><label>Interested In</label>
+          <select>
+            <option value="">— Select a Service —</option>
+            <option>Ayurvedic Consultation</option>
+            <option>Yoga Classes</option>
+            <option>Panchakarma Detox</option>
+            <option>Pranayama & Breathwork</option>
+            <option>Meditation Program</option>
+            <option>Nutrition & Herbal Remedies</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="fg"><label>Message</label><textarea placeholder="Tell us about your wellness goals or any specific health concerns..."></textarea></div>
+        <button class="bsub" onclick="this.textContent='✅ Message Sent!';this.style.background='#2e5c2e';setTimeout(()=>{this.textContent='Send Message 🌿';this.style.background=''},3000)">Send Message 🌿</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="fg4">
+    <div class="fbrand">
+      <div class="nav-logo">
+        <img src="logo.jpeg" alt="VidYoga Logo" style="height:46px;width:46px;object-fit:contain;border-radius:50%" />
+        <div class="nltext">
+          <span class="brand" style="font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;display:block">VidYoga Ayurveda</span>
+          <span class="tag" style="font-size:.66rem;letter-spacing:1px;text-transform:uppercase;display:block;font-family:'Noto Sans Devanagari',sans-serif">विद्या ददाति विनयम्</span>
+        </div>
+      </div>
+      <p>A holistic wellness center rooted in the ancient traditions of Ayurveda and Yoga, serving communities across Telangana and beyond.</p>
+    </div>
+    <div class="fcol"><h4>Quick Links</h4><ul><li><a href="#about">About Us</a></li><li><a href="#services">Services</a></li><li><a href="#classes">Classes</a></li><li><a href="#schedule">Schedule</a></li><li><a href="#contact">Contact</a></li></ul></div>
+    <div class="fcol"><h4>Services</h4><ul><li><a href="#services">Ayurvedic Consultation</a></li><li><a href="#services">Yoga Therapy</a></li><li><a href="#services">Panchakarma</a></li><li><a href="#services">Pranayama</a></li><li><a href="#services">Meditation</a></li></ul></div>
+    <div class="fcol"><h4>Follow Us</h4><ul><li><a href="#">Instagram</a></li><li><a href="#">Facebook</a></li><li><a href="#">YouTube</a></li><li><a href="#">WhatsApp Community</a></li></ul></div>
+  </div>
+  <div class="fbot">
+    <span>© 2026 VidYoga Ayurveda. All rights reserved.</span>
+    <span>Made with 🌿 in Telangana, India</span>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('ham').addEventListener('click',()=>document.getElementById('mobNav').classList.toggle('open'));
+  function cm(){document.getElementById('mobNav').classList.remove('open')}
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');io.unobserve(e.target)}}),{threshold:.1});
+  document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

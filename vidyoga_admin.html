@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Vidyoga Ayurveda</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--sf:#c8762b;--sfl:#fdf3e7;--sfm:#f0c080;--gr:#3d6b4f;--grl:#e8f0eb;--cream:#faf8f4;--warm:#f5f0e8;--ch:#1e1e1c;--mu:#7a7870;--bd:rgba(200,118,43,0.15);}
+html,body{height:100%;font-family:'DM Sans',sans-serif;background:#f0ede8;color:var(--ch);overflow:hidden;}
+/* LOGIN */
+#lw{position:fixed;inset:0;background:var(--ch);display:flex;align-items:center;justify-content:center;z-index:9999;}
+.lcard{background:white;border-radius:1.5rem;padding:3rem 2.5rem;width:400px;}
+.llogo{font-family:'Cormorant Garamond',serif;font-size:1.85rem;font-weight:500;color:var(--ch);text-align:center;}
+.llogo span{color:var(--sf);}
+.lsub{font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--mu);text-align:center;margin-bottom:2rem;}
+.lerr{background:#fdf0f0;border:0.5px solid #e24b4a;color:#a32d2d;font-size:0.8rem;padding:0.6rem 1rem;border-radius:0.6rem;margin-bottom:1rem;display:none;text-align:center;}
+.lf{display:block;font-size:0.66rem;color:var(--mu);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem;}
+.li{width:100%;background:var(--warm);border:0.5px solid rgba(200,118,43,0.2);border-radius:0.7rem;padding:0.72rem 1rem;font-family:'DM Sans',sans-serif;font-size:0.9rem;color:var(--ch);outline:none;margin-bottom:1rem;transition:border-color 0.2s;}
+.li:focus{border-color:var(--sf);}
+.lbtn{width:100%;background:var(--sf);color:white;border:none;border-radius:2rem;padding:0.88rem;font-family:'DM Sans',sans-serif;font-size:0.9rem;cursor:pointer;transition:background 0.2s;margin-top:0.3rem;}
+.lbtn:hover{background:var(--gr);}
+/* APP */
+#app{display:none;height:100vh;flex-direction:column;}
+.topbar{height:52px;background:white;border-bottom:0.5px solid var(--bd);display:flex;align-items:center;justify-content:space-between;padding:0 1.4rem;flex-shrink:0;}
+.tb-brand-name{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:500;color:var(--ch);}
+.tb-brand-name span{color:var(--sf);}
+.tb-brand-sub{font-size:0.54rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--mu);}
+.tb-r{display:flex;align-items:center;gap:0.8rem;}
+.tb-date{font-size:0.73rem;color:var(--mu);}
+.uchip{display:flex;align-items:center;gap:0.5rem;font-size:0.76rem;color:var(--mu);background:var(--warm);border:0.5px solid var(--bd);border-radius:2rem;padding:0.28rem 0.8rem;}
+.av{width:24px;height:24px;background:var(--sfl);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.6rem;color:var(--sf);font-weight:500;}
+.lout{background:transparent;border:0.5px solid var(--bd);border-radius:2rem;padding:0.28rem 0.8rem;font-family:'DM Sans',sans-serif;font-size:0.73rem;color:var(--mu);cursor:pointer;transition:all 0.2s;}
+.lout:hover{border-color:#e24b4a;color:#e24b4a;}
+.bw{display:flex;flex:1;overflow:hidden;}
+/* SIDEBAR */
+.sb{width:210px;background:var(--ch);padding:1rem 0.8rem;display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto;}
+.sb-h{font-size:0.56rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.2);margin:0.9rem 0 0.38rem 0.6rem;}
+.sb-h:first-child{margin-top:0;}
+.sbn{list-style:none;}
+.sbn li{margin-bottom:1px;}
+.sbn a{display:flex;align-items:center;gap:0.6rem;padding:0.56rem 0.72rem;border-radius:0.55rem;font-size:0.78rem;color:rgba(255,255,255,0.4);cursor:pointer;transition:all 0.17s;}
+.sbn a:hover{background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.72);}
+.sbn a.act{background:var(--sf);color:white;}
+.sbn a .cnt{margin-left:auto;background:rgba(255,255,255,0.14);font-size:0.6rem;padding:0.07rem 0.42rem;border-radius:2rem;min-width:17px;text-align:center;}
+.sbn a.act .cnt{background:rgba(255,255,255,0.25);}
+.sb-lo{margin-top:auto;display:flex;align-items:center;gap:0.55rem;padding:0.55rem 0.72rem;font-size:0.73rem;color:rgba(255,255,255,0.26);cursor:pointer;border-radius:0.55rem;transition:all 0.18s;}
+.sb-lo:hover{color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.05);}
+/* MAIN */
+.main{flex:1;overflow-y:auto;padding:1.6rem;}
+.sec{display:none;}.sec.show{display:block;}
+.ph{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.4rem;flex-wrap:wrap;gap:0.8rem;}
+.ph-t{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:400;color:var(--ch);}
+.ph-s{font-size:0.78rem;color:var(--mu);margin-top:0.12rem;font-weight:300;}
+.ph-act{display:flex;gap:0.55rem;align-items:center;flex-wrap:wrap;}
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:0.9rem;margin-bottom:1.4rem;}
+.sc{background:white;border-radius:0.95rem;padding:1.15rem 1.3rem;border:0.5px solid var(--bd);}
+.sc.acc{background:var(--sf);}
+.sc-n{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:400;color:var(--ch);line-height:1;}
+.sc.acc .sc-n,.sc.acc .sc-l,.sc.acc .sc-s{color:white;}
+.sc-l{font-size:0.62rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--mu);margin-top:0.25rem;}
+.sc-s{font-size:0.66rem;color:var(--gr);margin-top:0.3rem;}
+.sc.acc .sc-s{opacity:0.8;}
+/* CARD */
+.card{background:white;border-radius:0.95rem;border:0.5px solid var(--bd);overflow:hidden;margin-bottom:1.3rem;}
+.ch{padding:0.9rem 1.3rem;border-bottom:0.5px solid var(--bd);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.55rem;}
+.ct{font-family:'Cormorant Garamond',serif;font-size:1.02rem;font-weight:500;color:var(--ch);}
+.tools{display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;}
+.fs{background:var(--warm);border:0.5px solid var(--bd);border-radius:0.55rem;padding:0.46rem 0.78rem;font-family:'DM Sans',sans-serif;font-size:0.78rem;color:var(--ch);outline:none;min-width:165px;}
+.fsel{background:var(--warm);border:0.5px solid var(--bd);border-radius:0.55rem;padding:0.46rem 0.78rem;font-family:'DM Sans',sans-serif;font-size:0.78rem;color:var(--ch);outline:none;cursor:pointer;}
+.btn-csv{background:#185fa5;color:white;border:none;border-radius:0.55rem;padding:0.46rem 0.9rem;font-size:0.73rem;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background 0.2s;}
+.btn-csv:hover{background:#0c447c;}
+.btn-xl{background:#1d6f42;color:white;border:none;border-radius:0.55rem;padding:0.46rem 0.9rem;font-size:0.73rem;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background 0.2s;}
+.btn-xl:hover{background:#0f4a28;}
+/* TABLE */
+.tw{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;}
+th{padding:0.62rem 1.05rem;text-align:left;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--mu);border-bottom:0.5px solid var(--bd);background:#faf8f4;white-space:nowrap;}
+td{padding:0.72rem 1.05rem;font-size:0.78rem;color:var(--ch);border-bottom:0.5px solid rgba(200,118,43,0.06);vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:#fdf9f5;}
+/* BADGES */
+.badge{display:inline-flex;align-items:center;padding:0.18rem 0.62rem;border-radius:2rem;font-size:0.64rem;font-weight:500;white-space:nowrap;}
+.badge.pending{background:var(--sfl);color:var(--sf);}
+.badge.confirmed{background:var(--grl);color:var(--gr);}
+.badge.done{background:#f1efea;color:#5f5e5a;}
+.badge.cancelled{background:#fcebeb;color:#a32d2d;}
+.badge.new,.badge.dual{background:#e6f1fb;color:#185fa5;}
+.badge.vata{background:#fdf3e7;color:#c8762b;}
+.badge.pitta{background:#fbeaf0;color:#993556;}
+.badge.kapha{background:#e8f0eb;color:#3d6b4f;}
+.badge.tri{background:#f1efea;color:#5f5e5a;}
+.badge.balanced{background:#eaf3de;color:#3b6d11;}
+/* ACTION BUTTONS */
+.ab{background:none;border:0.5px solid var(--bd);border-radius:0.38rem;padding:0.18rem 0.5rem;font-size:0.66rem;cursor:pointer;color:var(--mu);transition:all 0.17s;font-family:'DM Sans',sans-serif;margin-right:0.22rem;}
+.ab:hover{border-color:var(--sf);color:var(--sf);}
+.ab.ok:hover{border-color:var(--gr);color:var(--gr);}
+.ab.del:hover{border-color:#e24b4a;color:#e24b4a;}
+/* EMPTY */
+.empty{text-align:center;padding:2.75rem 2rem;}
+.ei{width:48px;height:48px;background:var(--warm);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 0.85rem;}
+.empty h3{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:400;color:var(--ch);margin-bottom:0.3rem;}
+.empty p{font-size:0.78rem;color:var(--mu);line-height:1.7;max-width:340px;margin:0 auto;}
+/* DOSHA BARS */
+.dbr{margin-bottom:0.85rem;}
+.dbh{display:flex;justify-content:space-between;font-size:0.75rem;margin-bottom:0.26rem;}
+.dtrk{background:var(--warm);border-radius:2rem;height:8px;overflow:hidden;}
+.dfl{height:100%;border-radius:2rem;transition:width 0.7s ease;}
+.dfl.vata{background:#c8762b;} .dfl.pitta{background:#993556;} .dfl.kapha{background:#3d6b4f;}
+/* MINI CAL */
+.mcal{background:white;border:0.5px solid var(--bd);border-radius:0.95rem;padding:1rem;}
+.mcal-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:0.8rem;}
+.mcal-month{font-family:'Cormorant Garamond',serif;font-size:0.92rem;font-weight:500;}
+.mcal-nav{background:none;border:0.5px solid var(--bd);border-radius:50%;width:23px;height:23px;cursor:pointer;font-size:0.8rem;color:var(--mu);}
+.mcal-nav:hover{border-color:var(--sf);color:var(--sf);}
+.mcg{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
+.mcdh{text-align:center;font-size:0.56rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--mu);padding:0.22rem 0;}
+.mcd{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:0.73rem;color:var(--mu);border-radius:50%;position:relative;}
+.mcd.avail{color:var(--ch);font-weight:500;cursor:pointer;background:var(--sfl);}
+.mcd.avail:hover{background:var(--sf);color:white;}
+.mcd.today{border:1px solid var(--sf);}
+.mcd.past{opacity:0.3;}
+.mcd .dot{position:absolute;bottom:1px;left:50%;transform:translateX(-50%);width:3px;height:3px;background:var(--sf);border-radius:50%;}
+/* TIMELINE */
+.tl{padding:1rem 1.3rem;}
+.tl-i{display:flex;gap:0.8rem;margin-bottom:1rem;}
+.tl-i:last-child{margin-bottom:0;}
+.tl-dot{width:8px;height:8px;border-radius:50%;background:var(--sf);flex-shrink:0;margin-top:4px;}
+.tl-nm{font-size:0.82rem;font-weight:500;color:var(--ch);}
+.tl-mt{font-size:0.7rem;color:var(--mu);margin-top:0.1rem;}
+/* TODAY SLOTS */
+.tslots{display:grid;grid-template-columns:repeat(3,1fr);gap:0.65rem;padding:1rem 1.3rem;}
+.tslot{padding:0.8rem;border-radius:0.7rem;border:0.5px solid var(--bd);background:var(--warm);}
+.ts-time{font-size:0.75rem;font-weight:500;color:var(--sf);}
+.ts-nm{font-size:0.8rem;color:var(--ch);margin-top:0.15rem;}
+.ts-sv{font-size:0.68rem;color:var(--mu);margin-top:0.07rem;}
+.tslot.emp{background:white;border-style:dashed;display:flex;align-items:center;justify-content:center;opacity:0.5;}
+/* MODAL */
+.mbg{position:fixed;inset:0;background:rgba(0,0,0,0.36);z-index:500;display:none;align-items:center;justify-content:center;}
+.mbg.open{display:flex;}
+.modal{background:white;border-radius:1.2rem;padding:1.65rem;width:560px;max-width:95vw;max-height:88vh;overflow-y:auto;}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:500;color:var(--ch);margin-bottom:1rem;}
+.mr{display:flex;justify-content:space-between;align-items:flex-start;padding:0.48rem 0;border-bottom:0.5px solid rgba(200,118,43,0.07);gap:1rem;}
+.mr:last-child{border-bottom:none;}
+.ml{font-size:0.65rem;color:var(--mu);text-transform:uppercase;letter-spacing:0.08em;flex-shrink:0;}
+.mv{font-size:0.82rem;color:var(--ch);font-weight:500;text-align:right;word-break:break-word;}
+.mc-close{background:var(--warm);border:none;border-radius:0.55rem;padding:0.52rem 1.1rem;font-family:'DM Sans',sans-serif;font-size:0.78rem;cursor:pointer;margin-top:1rem;width:100%;}
+.mc-close:hover{background:var(--sfl);}
+/* modal score bars */
+.mbr{margin-bottom:0.72rem;}
+.mbr-hdr{display:flex;justify-content:space-between;font-size:0.73rem;margin-bottom:0.22rem;}
+.mbr-trk{background:var(--warm);border-radius:2rem;height:7px;overflow:hidden;}
+.mbr-fl{height:100%;border-radius:2rem;}
+/* TOAST */
+#toast{position:fixed;bottom:1.6rem;right:1.6rem;background:var(--ch);color:white;padding:0.65rem 1.1rem;border-radius:0.65rem;font-size:0.78rem;z-index:9999;opacity:0;transition:opacity 0.3s;pointer-events:none;}
+#toast.show{opacity:1;}
+::-webkit-scrollbar{width:5px;height:5px;} ::-webkit-scrollbar-track{background:transparent;} ::-webkit-scrollbar-thumb{background:rgba(200,118,43,0.18);border-radius:3px;}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="lw">
+  <div class="lcard">
+    <div class="llogo">Vid<span>yoga</span> Ayurveda</div>
+    <div class="lsub">Admin Dashboard</div>
+    <div class="lerr" id="lerr">Incorrect username or password.</div>
+    <label class="lf">Username</label>
+    <input class="li" id="lu" type="text" placeholder="admin@241" onkeydown="if(event.key==='Enter')doLogin()">
+    <label class="lf">Password</label>
+    <input class="li" id="lp" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="lbtn" onclick="doLogin()">Login to Dashboard</button>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" style="display:none;">
+  <div class="topbar">
+    <div><div class="tb-brand-name">Vid<span>yoga</span> Ayurveda</div><div class="tb-brand-sub">Admin Dashboard</div></div>
+    <div class="tb-r">
+      <div class="tb-date" id="tb-date"></div>
+      <div class="uchip"><div class="av">AD</div>admin@241</div>
+      <button class="lout" onclick="doLogout()">Logout</button>
+    </div>
+  </div>
+  <div class="bw">
+    <!-- SIDEBAR -->
+    <aside class="sb">
+      <div class="sb-h">Main</div>
+      <ul class="sbn">
+        <li><a onclick="showSec('ov')" id="sn-ov" class="act"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/></svg>Overview</a></li>
+        <li><a onclick="showSec('cal')" id="sn-cal"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Calendar</a></li>
+      </ul>
+      <div class="sb-h">Records</div>
+      <ul class="sbn">
+        <li><a onclick="showSec('bk')" id="sn-bk"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Bookings<span class="cnt" id="cnt-bk">0</span></a></li>
+        <li><a onclick="showSec('as')" id="sn-as"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z" stroke="currentColor" stroke-width="1.5"/></svg>Assessments<span class="cnt" id="cnt-as">0</span></a></li>
+        <li><a onclick="showSec('ct')" id="sn-ct"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="currentColor" stroke-width="1.5"/></svg>Inquiries<span class="cnt" id="cnt-ct">0</span></a></li>
+        <li><a onclick="showSec('us')" id="sn-us"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="currentColor" stroke-width="1.5"/><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="1.5"/></svg>Users<span class="cnt" id="cnt-us">0</span></a></li>
+      </ul>
+      <div class="sb-lo" onclick="doLogout()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Logout</div>
+    </aside>
+    <!-- MAIN -->
+    <main class="main">
+
+      <!-- OVERVIEW -->
+      <div class="sec show" id="sec-ov">
+        <div class="ph"><div><div class="ph-t">Overview</div><div class="ph-s">Welcome back, Admin.</div></div></div>
+        <div class="stats">
+          <div class="sc acc"><div class="sc-n" id="st-bk">0</div><div class="sc-l">Total Bookings</div><div class="sc-s">All time</div></div>
+          <div class="sc"><div class="sc-n" id="st-pd">0</div><div class="sc-l">Pending</div><div class="sc-s">Awaiting confirmation</div></div>
+          <div class="sc"><div class="sc-n" id="st-as">0</div><div class="sc-l">Assessments</div><div class="sc-s">Dosha submissions</div></div>
+          <div class="sc"><div class="sc-n" id="st-ct">0</div><div class="sc-l">Inquiries</div><div class="sc-s">Contact form</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;">
+          <div class="card"><div class="ch"><div class="ct">Recent Bookings</div><a onclick="showSec('bk')" style="font-size:0.73rem;color:var(--sf);cursor:pointer;">View all →</a></div><div id="ov-bk"></div></div>
+          <div class="card"><div class="ch"><div class="ct">Dosha Distribution</div></div>
+            <div style="padding:1rem 1.3rem;" id="dc-wrap">
+              <div class="dbr"><div class="dbh"><span style="font-weight:500;">Vata</span><span id="dc-vn" style="color:var(--mu);">0</span></div><div class="dtrk"><div class="dfl vata" id="dc-v" style="width:0%"></div></div></div>
+              <div class="dbr"><div class="dbh"><span style="font-weight:500;">Pitta</span><span id="dc-pn" style="color:var(--mu);">0</span></div><div class="dtrk"><div class="dfl pitta" id="dc-p" style="width:0%"></div></div></div>
+              <div class="dbr"><div class="dbh"><span style="font-weight:500;">Kapha</span><span id="dc-kn" style="color:var(--mu);">0</span></div><div class="dtrk"><div class="dfl kapha" id="dc-k" style="width:0%"></div></div></div>
+              <p id="dc-hint" style="font-size:0.73rem;color:var(--mu);margin-top:0.9rem;text-align:center;">Submit an Āyurniriksha assessment from the main site to see data.</p>
+            </div>
+          </div>
+        </div>
+        <div class="card"><div class="ch"><div class="ct">Today's Schedule</div><div id="td-lbl" style="font-size:0.72rem;color:var(--mu);"></div></div><div class="tslots" id="td-slots"><div class="tslot emp" style="grid-column:1/-1;"><span style="font-size:0.73rem;color:var(--mu);">No sessions today</span></div></div></div>
+      </div>
+
+      <!-- CALENDAR -->
+      <div class="sec" id="sec-cal">
+        <div class="ph"><div><div class="ph-t">Calendar</div><div class="ph-s">View scheduled sessions by date.</div></div></div>
+        <div style="display:grid;grid-template-columns:268px 1fr;gap:1.2rem;align-items:start;">
+          <div>
+            <div class="mcal"><div class="mcal-hdr"><button class="mcal-nav" onclick="mcPrev()">‹</button><span class="mcal-month" id="mc-lbl"></span><button class="mcal-nav" onclick="mcNext()">›</button></div><div class="mcg"><div class="mcdh">S</div><div class="mcdh">M</div><div class="mcdh">T</div><div class="mcdh">W</div><div class="mcdh">T</div><div class="mcdh">F</div><div class="mcdh">S</div><div id="mc-cells" style="display:contents;"></div></div></div>
+            <div class="card" style="margin-top:0.9rem;padding:0.9rem 1.1rem;"><div style="font-size:0.58rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--mu);margin-bottom:0.6rem;">Legend</div><div style="display:flex;flex-direction:column;gap:0.4rem;"><div style="display:flex;align-items:center;gap:0.45rem;font-size:0.73rem;"><div style="width:8px;height:8px;background:var(--sfl);border-radius:50%;"></div>Has bookings</div><div style="display:flex;align-items:center;gap:0.45rem;font-size:0.73rem;"><div style="width:8px;height:8px;background:var(--sf);border-radius:50%;"></div>Selected</div><div style="display:flex;align-items:center;gap:0.45rem;font-size:0.73rem;"><div style="width:8px;height:8px;border:1px solid var(--sf);border-radius:50%;"></div>Today</div></div></div>
+          </div>
+          <div class="card"><div class="ch"><div class="ct" id="cal-dt">Select a date</div></div><div id="cal-db"><div class="empty"><div class="ei"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" stroke="#7a7870" stroke-width="1.5"/><path d="M16 2v4M8 2v4M3 10h18" stroke="#7a7870" stroke-width="1.5"/></svg></div><h3>No date selected</h3><p>Click a date to view bookings.</p></div></div></div>
+        </div>
+      </div>
+
+      <!-- BOOKINGS -->
+      <div class="sec" id="sec-bk">
+        <div class="ph"><div><div class="ph-t">Bookings</div><div class="ph-s">All session bookings from the website.</div></div><div class="ph-act"><button class="btn-csv" onclick="exportCSV('bookings')">↓ CSV</button><button class="btn-xl" onclick="exportXL('bookings')">↓ Excel</button></div></div>
+        <div class="card"><div class="ch"><div class="ct" id="bk-lbl">All Bookings</div><div class="tools"><input class="fs" id="bkq" placeholder="Search name, email, ref…" oninput="rBk()"><select class="fsel" id="bkst" onchange="rBk()"><option value="">All Status</option><option value="pending">Pending</option><option value="confirmed">Confirmed</option><option value="done">Completed</option><option value="cancelled">Cancelled</option></select><select class="fsel" id="bksv" onchange="rBk()"><option value="">All Services</option><option>Ayurvedic Consultation</option><option>Yoga Therapy Session</option><option>Detox &amp; Rejuvenation</option><option>Nutrition Consultation</option></select></div></div><div class="tw" id="bk-body"></div></div>
+      </div>
+
+      <!-- ASSESSMENTS -->
+      <div class="sec" id="sec-as">
+        <div class="ph"><div><div class="ph-t">Āyurniriksha Assessments</div><div class="ph-s">All Āyurniriksha assessment submissions. Export to Excel for full structured reports.</div></div><div class="ph-act"><button class="btn-csv" onclick="exportCSV('assessments')">↓ CSV</button><button class="btn-xl" onclick="exportXL('assessments')">↓ Excel</button></div></div>
+        <div class="card"><div class="ch"><div class="ct" id="as-lbl">All Assessments</div><div class="tools"><input class="fs" id="asq" placeholder="Search name, email…" oninput="rAs()"><select class="fsel" id="asdf" onchange="rAs()"><option value="">All Profiles</option><option value="elevated vata">Elevated Vata</option><option value="elevated pitta">Elevated Pitta</option><option value="elevated kapha">Elevated Kapha</option><option value="vata-pitta">Vata-Pitta</option><option value="vata-kapha">Vata-Kapha</option><option value="pitta-kapha">Pitta-Kapha</option><option value="tridoshic">Tridoshic</option><option value="balanced">Balanced</option></select></div></div><div class="tw" id="as-body"></div></div>
+      </div>
+
+      <!-- CONTACTS -->
+      <div class="sec" id="sec-ct">
+        <div class="ph"><div><div class="ph-t">Contact Inquiries</div><div class="ph-s">Messages from the contact form.</div></div><div class="ph-act"><button class="btn-csv" onclick="exportCSV('contacts')">↓ CSV</button><button class="btn-xl" onclick="exportXL('contacts')">↓ Excel</button></div></div>
+        <div class="card"><div class="ch"><div class="ct" id="ct-lbl">All Inquiries</div><div class="tools"><input class="fs" id="ctq" placeholder="Search…" oninput="rCt()"></div></div><div class="tw" id="ct-body"></div></div>
+      </div>
+
+      <!-- USERS -->
+      <div class="sec" id="sec-us">
+        <div class="ph"><div><div class="ph-t">Registered Users</div><div class="ph-s">Accounts created on the website.</div></div><div class="ph-act"><button class="btn-xl" onclick="exportXL('users')">↓ Excel</button></div></div>
+        <div class="card"><div class="ch"><div class="ct" id="us-lbl">All Users</div><div class="tools"><input class="fs" id="usq" placeholder="Search…" oninput="rUs()"></div></div><div class="tw" id="us-body"></div></div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="mbg" id="mbg" onclick="if(event.target===this)closeMd()">
+  <div class="modal"><div class="modal-title" id="md-title">Details</div><div id="md-body"></div><button class="mc-close" onclick="closeMd()">Close</button></div>
+</div>
+<div id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script>
+var CREDS={u:'admin@241',p:'Adm!n@123'};
+var MN=['January','February','March','April','May','June','July','August','September','October','November','December'];
+var MCS={y:new Date().getFullYear(),m:new Date().getMonth(),sel:null};
+
+function getDB(){var d=JSON.parse(localStorage.getItem('vidyoga_db')||'{}');['bookings','assessments','contacts','users'].forEach(function(k){if(!d[k])d[k]=[];});return d;}
+function saveDB(d){localStorage.setItem('vidyoga_db',JSON.stringify(d));}
+
+function seed(){
+  var db=getDB(); if(db.bookings.length)return;
+  var today=new Date();
+  function ds(o){var d=new Date(today);d.setDate(d.getDate()+o);return MN[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear();}
+  var NM=[['Ananya','Reddy'],['Ramesh','Kumar'],['Priya','Sharma'],['Sunita','Bhat'],['Arjun','Nair'],['Deepa','Menon']];
+  var SV=['Ayurvedic Consultation','Yoga Therapy Session','Detox & Rejuvenation','Nutrition Consultation'];
+  var ST=['pending','confirmed','confirmed','done','pending','confirmed'];
+  var DT=[
+    {tp:'Elevated Vata',v:8,p:3,k:2,b:2},
+    {tp:'Elevated Pitta',v:3,p:9,k:2,b:1},
+    {tp:'Elevated Kapha',v:2,p:3,k:9,b:1},
+    {tp:'Vata-Pitta',v:7,p:6,k:1,b:1},
+    {tp:'Elevated Vata',v:9,p:3,k:2,b:1},
+    {tp:'Tridoshic (Vata-Pitta-Kapha)',v:5,p:5,k:4,b:1}
+  ];
+  var TI=['07:00 AM','09:30 AM','11:00 AM','02:00 PM','04:00 PM','06:00 PM'];
+  NM.forEach(function(n,i){
+    var d=DT[i], tot=d.v+d.p+d.k+d.b;
+    db.bookings.push({ref:'VYA-100'+(i+1),fname:n[0],lname:n[1],email:n[0].toLowerCase()+'@example.com',phone:'+91 9876'+i+'0000',service:SV[i%4],date:ds(i-2),time:TI[i%6],mode:i%2===0?'Online':'In-person',age:String(25+i*4),city:['Bangalore','Hyderabad','Chennai','Mumbai'][i%4],notes:'Sample booking.',status:ST[i],duration:'60 min',created:new Date(today.getTime()-i*86400000).toLocaleString()});
+    db.assessments.push({name:n[0]+' '+n[1],email:n[0].toLowerCase()+'@example.com',phone:'+91 9876'+i+'0001',age:String(25+i*4),city:['Bangalore','Hyderabad','Chennai','Mumbai'][i%4],gender:i%2===0?'Female':'Male',dosha_type:d.tp,vata_count:d.v,pitta_count:d.p,kapha_count:d.k,balanced_count:d.b,vata_pct:parseFloat((d.v/tot*100).toFixed(1)),pitta_pct:parseFloat((d.p/tot*100).toFixed(1)),kapha_pct:parseFloat((d.k/tot*100).toFixed(1)),balanced_pct:parseFloat((d.b/tot*100).toFixed(1)),disease_history:i===2?'Type 2 Diabetes (managed)':'',surgery_history:i===4?'Knee surgery - Jan 2022':'',created:new Date(today.getTime()-i*86400000).toLocaleString()});
+  });
+  db.contacts.push({name:'Kavitha Rao',email:'kavitha@example.com',subject:'Yoga therapy for back pain',message:'Would like to know about yoga therapy programs for chronic back pain.',created:new Date().toLocaleString()});
+  db.contacts.push({name:'Suresh Babu',email:'suresh@example.com',subject:'Online consultation from UK',message:'Can I book an online Ayurvedic consultation from the UK? What are the available timings?',created:new Date(today.getTime()-86400000).toLocaleString()});
+  db.users.push({name:'Ananya Reddy',email:'ananya@example.com',username:'ananya_r',joined:new Date().toLocaleString(),status:'active'});
+  db.users.push({name:'Ramesh Kumar',email:'ramesh@example.com',username:'ramesh_k',joined:new Date(today.getTime()-86400000).toLocaleString(),status:'active'});
+  saveDB(db);
+}
+
+function doLogin(){
+  var u=document.getElementById('lu').value.trim(), p=document.getElementById('lp').value;
+  if(u===CREDS.u&&p===CREDS.p){document.getElementById('lw').style.display='none';document.getElementById('app').style.display='flex';seed();initApp();}
+  else{document.getElementById('lerr').style.display='block';document.getElementById('lp').value='';}
+}
+function doLogout(){document.getElementById('app').style.display='none';document.getElementById('lw').style.display='flex';document.getElementById('lu').value='';document.getElementById('lp').value='';document.getElementById('lerr').style.display='none';}
+
+function initApp(){
+  document.getElementById('tb-date').textContent=new Date().toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('td-lbl').textContent=new Date().toLocaleDateString('en-IN',{weekday:'long',month:'long',day:'numeric'});
+  refreshC(); renderOv(); renderMcal();
+}
+function refreshC(){
+  var db=getDB();
+  ['bk','as','ct','us'].forEach(function(k){var m={bk:'bookings',as:'assessments',ct:'contacts',us:'users'};document.getElementById('cnt-'+k).textContent=db[m[k]].length;});
+  document.getElementById('st-bk').textContent=db.bookings.length;
+  document.getElementById('st-pd').textContent=db.bookings.filter(function(b){return b.status==='pending';}).length;
+  document.getElementById('st-as').textContent=db.assessments.length;
+  document.getElementById('st-ct').textContent=db.contacts.length;
+}
+
+function renderOv(){
+  var db=getDB(); refreshC();
+  // Recent bookings
+  var l5=db.bookings.slice(-5).reverse();
+  var bEl=document.getElementById('ov-bk');
+  if(!l5.length){bEl.innerHTML=emH('Bookings','No bookings yet.');}
+  else{var h='<div class="tl">'+l5.map(function(b){return '<div class="tl-i"><div class="tl-dot"></div><div><div class="tl-nm">'+b.fname+' '+b.lname+' <span class="badge '+b.status+'">'+b.status+'</span></div><div class="tl-mt">'+b.service+' · '+b.date+' '+b.time+' · '+b.mode+'</div></div></div>';}).join('')+'</div>';bEl.innerHTML=h;}
+  // Dosha bars
+  var dc={V:0,P:0,K:0};
+  db.assessments.forEach(function(a){var dt=(a.dosha_type||'').toLowerCase();if(dt.indexOf('tridoshic')>-1){dc.V++;dc.P++;dc.K++;}else if(dt.indexOf('vata-pitta')>-1){dc.V++;dc.P++;}else if(dt.indexOf('vata-kapha')>-1){dc.V++;dc.K++;}else if(dt.indexOf('pitta-kapha')>-1){dc.P++;dc.K++;}else if(dt.indexOf('vata')>-1)dc.V++;else if(dt.indexOf('pitta')>-1)dc.P++;else if(dt.indexOf('kapha')>-1)dc.K++;});
+  var tot=db.assessments.length||1;
+  document.getElementById('dc-v').style.width=Math.round(dc.V/tot*100)+'%';
+  document.getElementById('dc-p').style.width=Math.round(dc.P/tot*100)+'%';
+  document.getElementById('dc-k').style.width=Math.round(dc.K/tot*100)+'%';
+  document.getElementById('dc-vn').textContent=dc.V+' sub'+(dc.V!==1?'s':'');
+  document.getElementById('dc-pn').textContent=dc.P+' sub'+(dc.P!==1?'s':'');
+  document.getElementById('dc-kn').textContent=dc.K+' sub'+(dc.K!==1?'s':'');
+  if(db.assessments.length)document.getElementById('dc-hint').style.display='none';
+  // Today
+  var td=new Date(), tds=MN[td.getMonth()]+' '+td.getDate()+', '+td.getFullYear();
+  var tbk=db.bookings.filter(function(b){return b.date===tds;});
+  var sl=document.getElementById('td-slots');
+  if(!tbk.length){sl.innerHTML='<div class="tslot emp" style="grid-column:1/-1;"><span style="font-size:0.73rem;color:var(--mu);">No sessions today</span></div>';}
+  else{sl.innerHTML=tbk.map(function(b){return '<div class="tslot"><div class="ts-time">'+b.time+'</div><div class="ts-nm">'+b.fname+' '+b.lname+'</div><div class="ts-sv">'+b.service+' · '+b.mode+'</div></div>';}).join('');}
+}
+
+function renderMcal(){
+  var y=MCS.y,m=MCS.m; document.getElementById('mc-lbl').textContent=MN[m]+' '+y;
+  var db=getDB(),bd={};db.bookings.forEach(function(b){bd[b.date]=true;});
+  var first=new Date(y,m,1).getDay(),days=new Date(y,m+1,0).getDate();
+  var today=new Date();today.setHours(0,0,0,0);
+  var c='';
+  for(var i=0;i<first;i++)c+='<div class="mcd"></div>';
+  for(var d=1;d<=days;d++){
+    var dt=new Date(y,m,d);dt.setHours(0,0,0,0);
+    var ds2=MN[m]+' '+d+', '+y;
+    var cls='mcd'+(dt.getTime()===today.getTime()?' today':'')+(dt<today?' past':'');
+    var hasBk=bd[ds2],isSel=MCS.sel===ds2;
+    var st=isSel?'background:var(--sf);color:white;':hasBk?'background:var(--sfl);':'';
+    var oc=dt>=today?'onclick="mcSel(this,\''+ds2+'\')"':'';
+    c+='<div class="'+cls+(hasBk?' avail':'')+'" '+oc+' style="'+st+'">'+d+(hasBk&&!isSel?'<span class="dot"></span>':'')+'</div>';
+  }
+  document.getElementById('mc-cells').innerHTML=c;
+}
+function mcPrev(){var d=new Date(MCS.y,MCS.m-1,1);MCS.y=d.getFullYear();MCS.m=d.getMonth();renderMcal();}
+function mcNext(){var d=new Date(MCS.y,MCS.m+1,1);MCS.y=d.getFullYear();MCS.m=d.getMonth();renderMcal();}
+function mcSel(el,ds){
+  MCS.sel=ds;renderMcal();
+  var db=getDB(),bk=db.bookings.filter(function(b){return b.date===ds;});
+  document.getElementById('cal-dt').textContent='Bookings — '+ds;
+  if(!bk.length){document.getElementById('cal-db').innerHTML=emH('Bookings','No sessions on this date.');return;}
+  var h='<table><thead><tr><th>Time</th><th>Name</th><th>Service</th><th>Mode</th><th>Status</th><th></th></tr></thead><tbody>'+bk.map(function(b){var i=db.bookings.indexOf(b);return '<tr><td>'+b.time+'</td><td>'+b.fname+' '+b.lname+'</td><td>'+b.service+'</td><td>'+b.mode+'</td><td><span class="badge '+b.status+'">'+b.status+'</span></td><td><button class="ab" onclick="viewMd(\'bookings\','+i+')">View</button></td></tr>';}).join('')+'</tbody></table>';
+  document.getElementById('cal-db').innerHTML=h;
+}
+
+function rBk(){
+  var db=getDB();
+  var q=(document.getElementById('bkq')||{value:''}).value.toLowerCase();
+  var st=(document.getElementById('bkst')||{value:''}).value;
+  var sv=(document.getElementById('bksv')||{value:''}).value;
+  var data=db.bookings.filter(function(b){return(b.fname+' '+b.lname+' '+b.email+' '+(b.ref||'')).toLowerCase().includes(q)&&(!st||b.status===st)&&(!sv||b.service===sv);}).reverse();
+  document.getElementById('bk-lbl').textContent='All Bookings ('+data.length+')';
+  var el=document.getElementById('bk-body');
+  if(!data.length){el.innerHTML=emH('Bookings','No bookings found.');return;}
+  var h='<table><thead><tr><th>Ref</th><th>Name</th><th>Service</th><th>Date</th><th>Time</th><th>Mode</th><th>Status</th><th>Actions</th></tr></thead><tbody>'+data.map(function(b){
+    var i=db.bookings.indexOf(b);
+    return '<tr><td style="font-family:monospace;font-size:0.72rem;color:var(--sf);">'+b.ref+'</td><td><div style="font-weight:500;">'+b.fname+' '+b.lname+'</div><div style="font-size:0.68rem;color:var(--mu);">'+b.email+'</div></td><td>'+b.service+'</td><td>'+b.date+'</td><td>'+b.time+'</td><td>'+b.mode+'</td><td><span class="badge '+b.status+'">'+b.status+'</span></td><td style="white-space:nowrap;"><button class="ab" onclick="viewMd(\'bookings\','+i+')">View</button>'+(b.status==='pending'?'<button class="ab ok" onclick="setSt('+i+',\'confirmed\')">✓</button>':'')+(b.status==='confirmed'?'<button class="ab" onclick="setSt('+i+',\'done\')">Done</button>':'')+'<button class="ab del" onclick="delR(\'bookings\','+i+')">✕</button></td></tr>';
+  }).join('')+'</tbody></table>';
+  el.innerHTML=h;
+}
+function setSt(i,s){var db=getDB();db.bookings[i].status=s;saveDB(db);rBk();renderOv();refreshC();toast('"'+s+'" set');}
+
+function rAs(){
+  var db=getDB();
+  var q=(document.getElementById('asq')||{value:''}).value.toLowerCase();
+  var df=(document.getElementById('asdf')||{value:''}).value.toLowerCase();
+  var data=db.assessments.filter(function(a){return(a.name+' '+a.email).toLowerCase().includes(q)&&(!df||(a.dosha_type||'').toLowerCase().includes(df));}).reverse();
+  document.getElementById('as-lbl').textContent='All Assessments ('+data.length+')';
+  var el=document.getElementById('as-body');
+  if(!data.length){el.innerHTML=emH('Assessments','No Āyurniriksha submissions yet.');return;}
+  var h='<table><thead><tr><th>Name</th><th>Email</th><th>Age</th><th>City</th><th>Dosha Profile</th><th>Vata (/15)</th><th>Pitta (/15)</th><th>Kapha (/15)</th><th>Balanced</th><th>Medical History</th><th>Submitted</th><th>Actions</th></tr></thead><tbody>'+data.map(function(a){
+    var i=db.assessments.indexOf(a);
+    var dt=a.dosha_type||'—'; var dtl=dt.toLowerCase();
+    var dc='new';
+    if(dtl.indexOf('tridoshic')>-1)dc='tri';else if(dtl.indexOf('-')>-1)dc='dual';else if(dtl.indexOf('vata')>-1)dc='vata';else if(dtl.indexOf('pitta')>-1)dc='pitta';else if(dtl.indexOf('kapha')>-1)dc='kapha';else if(dtl.indexOf('balanced')>-1)dc='balanced';
+    var sc=function(n,p){return n!==undefined?'<span style="font-weight:500;">'+n+'</span> <span style="color:var(--mu);font-size:0.68rem;">('+p+'%)</span>':'—';};
+    return '<tr><td><div style="font-weight:500;">'+a.name+'</div><div style="font-size:0.66rem;color:var(--mu);">'+(a.gender||'')+'</div></td><td>'+a.email+'</td><td>'+(a.age||'—')+'</td><td>'+(a.city||'—')+'</td><td><span class="badge '+dc+'">'+dt+'</span></td><td style="text-align:center;">'+sc(a.vata_count,a.vata_pct)+'</td><td style="text-align:center;">'+sc(a.pitta_count,a.pitta_pct)+'</td><td style="text-align:center;">'+sc(a.kapha_count,a.kapha_pct)+'</td><td style="text-align:center;">'+(a.balanced_count!==undefined?a.balanced_count:'—')+'</td><td style="font-size:0.7rem;color:var(--mu);max-width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+(a.disease_history||'—')+'</td><td style="font-size:0.68rem;color:var(--mu);white-space:nowrap;">'+a.created+'</td><td style="white-space:nowrap;"><button class="ab" onclick="viewAsMd('+i+')">View</button><button class="ab del" onclick="delR(\'assessments\','+i+')">✕</button></td></tr>';
+  }).join('')+'</tbody></table>';
+  el.innerHTML=h;
+}
+
+function viewAsMd(i){
+  var db=getDB(); var a=db.assessments[i]; if(!a)return;
+  document.getElementById('md-title').textContent='Assessment — '+a.name;
+  var h='';
+  var tot=15;
+  [{d:'vata',cnt:a.vata_count,pct:a.vata_pct,col:'#c8762b'},{d:'pitta',cnt:a.pitta_count,pct:a.pitta_pct,col:'#993556'},{d:'kapha',cnt:a.kapha_count,pct:a.kapha_pct,col:'#3d6b4f'},{d:'balanced',cnt:a.balanced_count,pct:a.balanced_pct,col:'#185fa5'}].forEach(function(x){
+    if(x.cnt===undefined)return;
+    h+='<div class="mbr"><div class="mbr-hdr"><span style="font-weight:500;text-transform:capitalize;">'+x.d+'</span><span style="color:var(--mu);">'+x.cnt+' / 15 ('+x.pct+'%)</span></div><div class="mbr-trk"><div class="mbr-fl" style="width:'+x.pct+'%;background:'+x.col+';"></div></div></div>';
+  });
+  var dtl=(a.dosha_type||'').toLowerCase(); var dc='new';
+  if(dtl.indexOf('tridoshic')>-1)dc='tri';else if(dtl.indexOf('-')>-1)dc='dual';else if(dtl.indexOf('vata')>-1)dc='vata';else if(dtl.indexOf('pitta')>-1)dc='pitta';else if(dtl.indexOf('kapha')>-1)dc='kapha';else if(dtl.indexOf('balanced')>-1)dc='balanced';
+  h+='<div class="mr"><span class="ml">Dosha Profile</span><span class="mv"><span class="badge '+dc+'">'+a.dosha_type+'</span></span></div>';
+  [['Name',a.name],['Email',a.email],['Phone',a.phone||'—'],['Age',a.age||'—'],['Gender',a.gender||'—'],['City',a.city||'—'],['Vata %',a.vata_pct+'%'],['Pitta %',a.pitta_pct+'%'],['Kapha %',a.kapha_pct+'%'],['Balanced %',a.balanced_pct+'%'],['Medical History',a.disease_history||'None'],['Surgery History',a.surgery_history||'None'],['Submitted',a.created]].forEach(function(r){h+='<div class="mr"><span class="ml">'+r[0]+'</span><span class="mv">'+r[1]+'</span></div>';});
+  document.getElementById('md-body').innerHTML=h;
+  document.getElementById('mbg').classList.add('open');
+}
+
+function rCt(){
+  var db=getDB();
+  var q=(document.getElementById('ctq')||{value:''}).value.toLowerCase();
+  var data=db.contacts.filter(function(c){return(c.name+' '+c.email+' '+(c.subject||'')).toLowerCase().includes(q);}).reverse();
+  document.getElementById('ct-lbl').textContent='All Inquiries ('+data.length+')';
+  var el=document.getElementById('ct-body');
+  if(!data.length){el.innerHTML=emH('Inquiries','No contact inquiries yet.');return;}
+  var h='<table><thead><tr><th>Name</th><th>Email</th><th>Subject</th><th>Message</th><th>Date</th><th></th></tr></thead><tbody>'+data.map(function(c){var i=db.contacts.indexOf(c);return '<tr><td style="font-weight:500;">'+c.name+'</td><td>'+c.email+'</td><td>'+(c.subject||'—')+'</td><td style="max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:0.73rem;color:var(--mu);">'+(c.message||'')+'</td><td style="font-size:0.68rem;color:var(--mu);">'+c.created+'</td><td><button class="ab" onclick="viewMd(\'contacts\','+i+')">View</button><button class="ab del" onclick="delR(\'contacts\','+i+')">✕</button></td></tr>';}).join('')+'</tbody></table>';
+  el.innerHTML=h;
+}
+
+function rUs(){
+  var db=getDB();
+  var q=(document.getElementById('usq')||{value:''}).value.toLowerCase();
+  var data=db.users.filter(function(u){return(u.name+' '+u.email).toLowerCase().includes(q);}).reverse();
+  document.getElementById('us-lbl').textContent='All Users ('+data.length+')';
+  var el=document.getElementById('us-body');
+  if(!data.length){el.innerHTML=emH('Users','No registered users yet.');return;}
+  var h='<table><thead><tr><th>Name</th><th>Username</th><th>Email</th><th>Joined</th><th>Status</th><th></th></tr></thead><tbody>'+data.map(function(u){var i=db.users.indexOf(u);return '<tr><td style="font-weight:500;">'+u.name+'</td><td style="font-family:monospace;font-size:0.73rem;">'+u.username+'</td><td>'+u.email+'</td><td style="font-size:0.68rem;color:var(--mu);">'+u.joined+'</td><td><span class="badge confirmed">'+u.status+'</span></td><td><button class="ab del" onclick="delR(\'users\','+i+')">✕</button></td></tr>';}).join('')+'</tbody></table>';
+  el.innerHTML=h;
+}
+
+function viewMd(type,i){
+  var db=getDB(); var item=db[type][i]; if(!item)return;
+  document.getElementById('md-title').textContent=(type==='bookings'?'Booking':'Inquiry')+' Details';
+  var h='';Object.keys(item).forEach(function(k){var v=item[k]||'—';if(k==='status')h+='<div class="mr"><span class="ml">'+k+'</span><span class="mv"><span class="badge '+v+'">'+v+'</span></span></div>';else h+='<div class="mr"><span class="ml">'+k.replace(/_/g,' ')+'</span><span class="mv">'+v+'</span></div>';});
+  document.getElementById('md-body').innerHTML=h;
+  document.getElementById('mbg').classList.add('open');
+}
+function closeMd(){document.getElementById('mbg').classList.remove('open');}
+
+function delR(type,i){if(!confirm('Delete this record permanently?'))return;var db=getDB();db[type].splice(i,1);saveDB(db);refreshC();if(type==='bookings'){rBk();renderOv();}else if(type==='assessments'){rAs();renderOv();}else if(type==='contacts')rCt();else if(type==='users')rUs();toast('Deleted');}
+
+function showSec(name){
+  document.querySelectorAll('.sec').forEach(function(s){s.classList.remove('show');});
+  document.getElementById('sec-'+name).classList.add('show');
+  document.querySelectorAll('.sbn a').forEach(function(a){a.classList.remove('act');});
+  document.getElementById('sn-'+name).classList.add('act');
+  var fn={ov:renderOv,cal:renderMcal,bk:rBk,as:rAs,ct:rCt,us:rUs};
+  if(fn[name])fn[name]();
+}
+
+function emH(t,m){return '<div class="empty"><div class="ei"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z" stroke="#7a7870" stroke-width="1.5"/></svg></div><h3>No '+t.toLowerCase()+'</h3><p>'+m+'</p></div>';}
+function toast(msg){var el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');setTimeout(function(){el.classList.remove('show');},2400);}
+
+// ── CSV EXPORT ──────────────────────────────────────────
+function exportCSV(type){
+  var db=getDB(),data=db[type];
+  if(!data.length){toast('No data.');return;}
+  var keys=Object.keys(data[0]);
+  var csv=keys.join(',')+'\n'+data.map(function(r){return keys.map(function(k){return '"'+String(r[k]||'').replace(/"/g,'""')+'"';}).join(',');}).join('\n');
+  var a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='vidyoga_'+type+'_'+new Date().toISOString().slice(0,10)+'.csv';a.click();
+  toast('CSV exported — '+data.length+' records');
+}
+
+// ── EXCEL EXPORT ────────────────────────────────────────
+function exportXL(type){
+  var db=getDB(),data=db[type];
+  if(!data.length){toast('No data to export.');return;}
+  var wb=XLSX.utils.book_new();
+
+  if(type==='assessments'){
+    // ── Sheet 1: Full assessment data ──────────────────────────────
+    var COLS=[
+      {k:'name',h:'Full Name',w:22},
+      {k:'email',h:'Email Address',w:30},
+      {k:'phone',h:'Phone / WhatsApp',w:20},
+      {k:'age',h:'Age',w:7},
+      {k:'gender',h:'Gender',w:10},
+      {k:'city',h:'City',w:15},
+      {k:'dosha_type',h:'Dosha Profile',w:32},
+      {k:'vata_count',h:'Vata Score (/15)',w:16},
+      {k:'vata_pct',h:'Vata %',w:9},
+      {k:'pitta_count',h:'Pitta Score (/15)',w:17},
+      {k:'pitta_pct',h:'Pitta %',w:9},
+      {k:'kapha_count',h:'Kapha Score (/15)',w:17},
+      {k:'kapha_pct',h:'Kapha %',w:9},
+      {k:'balanced_count',h:'Balanced Score (/15)',w:20},
+      {k:'balanced_pct',h:'Balanced %',w:11},
+      {k:'disease_history',h:'Medical / Disease History',w:38},
+      {k:'surgery_history',h:'Surgery Details',w:32},
+      {k:'created',h:'Submitted On',w:24}
+    ];
+    var rows=[COLS.map(function(c){return c.h;})];
+    data.forEach(function(a){rows.push(COLS.map(function(c){var v=a[c.k];return v!==undefined&&v!==null?v:'';}));});
+    var ws=XLSX.utils.aoa_to_sheet(rows);
+    ws['!cols']=COLS.map(function(c){return{wch:c.w};});
+    ws['!freeze']={xSplit:0,ySplit:1};
+    XLSX.utils.book_append_sheet(wb,ws,'Āyurniriksha Assessments');
+
+    // ── Sheet 2: Summary report ────────────────────────────────────
+    var dc={Vata:0,Pitta:0,Kapha:0,Balanced:0,'Vata-Pitta':0,'Vata-Kapha':0,'Pitta-Kapha':0,'Tridoshic':0};
+    var avgs={V:0,P:0,K:0,B:0};
+    data.forEach(function(a){
+      var dt=a.dosha_type||'';
+      if(dt.indexOf('Tridoshic')>-1)dc['Tridoshic']++;
+      else if(dt.indexOf('Vata-Pitta')>-1)dc['Vata-Pitta']++;
+      else if(dt.indexOf('Vata-Kapha')>-1)dc['Vata-Kapha']++;
+      else if(dt.indexOf('Pitta-Kapha')>-1)dc['Pitta-Kapha']++;
+      else if(dt.indexOf('Vata')>-1)dc['Vata']++;
+      else if(dt.indexOf('Pitta')>-1)dc['Pitta']++;
+      else if(dt.indexOf('Kapha')>-1)dc['Kapha']++;
+      else dc['Balanced']++;
+      avgs.V+=a.vata_count||0;avgs.P+=a.pitta_count||0;avgs.K+=a.kapha_count||0;avgs.B+=a.balanced_count||0;
+    });
+    var tot=data.length||1;
+    var sr=[
+      ['Vidyoga Ayurveda — Āyurniriksha — Āyurniriksha Summary Report','',''],
+      ['Generated on','',new Date().toLocaleString()],
+      ['Total Submissions','',data.length],
+      ['','',''],
+      ['── Dosha Profile Distribution ──','',''],
+      ['Dosha Profile','Count','Percentage (%)']
+    ];
+    Object.keys(dc).forEach(function(k){sr.push([k,dc[k],parseFloat((dc[k]/tot*100).toFixed(1))]);});
+    sr.push(['','','']);
+    sr.push(['── Average Scores (per 15 questions) ──','','']);
+    sr.push(['Metric','Average Score','Percentage']);
+    [['Average Vata Score',avgs.V],['Average Pitta Score',avgs.P],['Average Kapha Score',avgs.K],['Average Balanced Score',avgs.B]].forEach(function(r){sr.push([r[0],parseFloat((r[1]/tot).toFixed(2)),parseFloat((r[1]/tot/15*100).toFixed(1))]);});
+    var ws2=XLSX.utils.aoa_to_sheet(sr);
+    ws2['!cols']=[{wch:38},{wch:12},{wch:18}];
+    ws2['!merges']=[{s:{r:0,c:0},e:{r:0,c:2}}];
+    XLSX.utils.book_append_sheet(wb,ws2,'Summary');
+
+    // ── Sheet 3: Individual answer log ────────────────────────────
+    var ALCOLS=[{k:'name',h:'Name',w:22},{k:'email',h:'Email',w:28},{k:'dosha_type',h:'Dosha Profile',w:32},{k:'answers_log',h:'Answer Log (Q=Dosha)',w:60},{k:'created',h:'Date',w:22}];
+    var alrows=[ALCOLS.map(function(c){return c.h;})];
+    data.forEach(function(a){alrows.push(ALCOLS.map(function(c){return a[c.k]||'';}));});
+    var ws3=XLSX.utils.aoa_to_sheet(alrows);
+    ws3['!cols']=ALCOLS.map(function(c){return{wch:c.w};});
+    ws3['!freeze']={xSplit:0,ySplit:1};
+    XLSX.utils.book_append_sheet(wb,ws3,'Answer Logs');
+
+  } else if(type==='bookings'){
+    var BC=[{k:'ref',h:'Ref ID',w:13},{k:'fname',h:'First Name',w:15},{k:'lname',h:'Last Name',w:15},{k:'email',h:'Email',w:30},{k:'phone',h:'Phone',w:20},{k:'service',h:'Service',w:28},{k:'date',h:'Date',w:24},{k:'time',h:'Time',w:11},{k:'mode',h:'Mode',w:14},{k:'age',h:'Age',w:7},{k:'city',h:'City',w:15},{k:'notes',h:'Notes',w:32},{k:'status',h:'Status',w:13},{k:'duration',h:'Duration',w:12},{k:'created',h:'Booked On',w:24}];
+    var br=[BC.map(function(c){return c.h;})];
+    data.forEach(function(b){br.push(BC.map(function(c){return b[c.k]||'';}));});
+    var ws4=XLSX.utils.aoa_to_sheet(br);ws4['!cols']=BC.map(function(c){return{wch:c.w};});ws4['!freeze']={xSplit:0,ySplit:1};
+    XLSX.utils.book_append_sheet(wb,ws4,'Bookings');
+
+  } else if(type==='contacts'){
+    var CC=[{k:'name',h:'Name',w:22},{k:'email',h:'Email',w:30},{k:'subject',h:'Subject',w:32},{k:'message',h:'Message',w:50},{k:'created',h:'Date',w:24}];
+    var cr=[CC.map(function(c){return c.h;})];
+    data.forEach(function(c){cr.push(CC.map(function(x){return c[x.k]||'';}));});
+    var ws5=XLSX.utils.aoa_to_sheet(cr);ws5['!cols']=CC.map(function(c){return{wch:c.w};});ws5['!freeze']={xSplit:0,ySplit:1};
+    XLSX.utils.book_append_sheet(wb,ws5,'Inquiries');
+
+  } else {
+    var keys=Object.keys(data[0]);
+    var gr=[keys];data.forEach(function(r){gr.push(keys.map(function(k){return r[k]||'';}));});
+    var ws6=XLSX.utils.aoa_to_sheet(gr);ws6['!cols']=keys.map(function(){return{wch:20};});
+    XLSX.utils.book_append_sheet(wb,ws6,type.charAt(0).toUpperCase()+type.slice(1));
+  }
+
+  XLSX.writeFile(wb,'vidyoga_'+type+'_'+new Date().toISOString().slice(0,10)+'.xlsx');
+  toast('Excel exported — '+data.length+' records');
+}
+
+document.addEventListener('keydown',function(e){
+  if(e.key==='Enter'&&document.getElementById('lw').style.display!=='none')doLogin();
+  if(e.key==='Escape')closeMd();
+});
+</script>
+</body>
+</html>
